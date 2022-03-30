@@ -2,7 +2,7 @@
 
 # Variables
 tenants=("mars" "jupiter" "saturn")
-acrName="SallyAcr"
+acrName="mytenataksacr"
 imageName="${acrName,,}.azurecr.io/syntheticapi:latest"
 deploymentName="syntheticapi"
 deploymentTemplate="deployment.yml"
@@ -38,9 +38,13 @@ for tenant in ${tenants[@]}; do
     else
         echo "[$deploymentName] deployment does not exist in the [$tenant] namespace"
         echo "creating [$deploymentName] deployment in the [$tenant] namespace..."
+        # cat $deploymentTemplate |
+        #     yq -Y "(.spec.template.spec.containers[0].image)|="\""$imageName"\" |
+        #     kubectl apply -n $tenant -f -
         cat $deploymentTemplate |
-            yq -Y "(.spec.template.spec.containers[0].image)|="\""$imageName"\" |
+            sed "s|{{imageName}}|$imageName|g" |
             kubectl apply -n $tenant -f -
+        
     fi
 
     # Create the service for the tenant if it doesn't already exists in the cluster
@@ -64,11 +68,16 @@ for tenant in ${tenants[@]}; do
         echo "[$ingressName] ingress does not exist in the [$tenant] namespace"
         host="$tenant.$dnsZoneName"
         echo "Creating [$ingressName] ingress in the [$tenant] namespace with [$host] host..."
+        # cat $ingressTemplate |
+        #     yq -Y "(.metadata.name)|="\""$ingressName"\" |
+        #     yq -Y "(.metadata.namespace)|="\""$tenant"\" |
+        #     yq -Y "(.spec.tls[0].hosts[0])|="\""$host"\" |
+        #     yq -Y "(.spec.rules[0].host)|="\""$host"\" |
+        #     kubectl apply -n $tenant -f -
         cat $ingressTemplate |
-            yq -Y "(.metadata.name)|="\""$ingressName"\" |
-            yq -Y "(.metadata.namespace)|="\""$tenant"\" |
-            yq -Y "(.spec.tls[0].hosts[0])|="\""$host"\" |
-            yq -Y "(.spec.rules[0].host)|="\""$host"\" |
+            sed "s|{{ingressName}}|$ingressName|g" |
+            sed "s|{{tenant}}|$tenant|g" |
+            sed "s|{{host}}|$host|g" |
             kubectl apply -n $tenant -f -
     fi
 

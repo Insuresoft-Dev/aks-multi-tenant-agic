@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-acrName="SallyAcr"
+acrName="mytenataksacr"
 imageName="syntheticapi"
 tag="latest"
 

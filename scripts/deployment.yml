@@ -41,7 +41,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: syntheticapi
-        image: paolosalvatori.azurecr.io/syntheticapi:latest
+        image: {{imageName}}
         resources:
           requests:
             memory: "64Mi"

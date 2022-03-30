@@ -1,7 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: syntheticapi
+  name: {{ingressName}}
+  namespace: {{tenant}}
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
     cert-manager.io/cluster-issuer: letsencrypt-application-gateway
@@ -9,10 +10,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - syntheticapi.baborbird.com
+    - {{host}}
     secretName: tls-secret
   rules:
-  - host: syntheticapi.baborbird.com
+  - host: {{host}}
     http:
       paths:
       - path: /

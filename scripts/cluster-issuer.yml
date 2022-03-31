@@ -14,7 +14,7 @@ spec:
     # You must replace this email address with your own.
     # Let's Encrypt will use this to contact you about expiring
     # certificates, and issues related to your account.
-    email: MY_EMAIL_ADDRESS
+    email: {{email}}
 
     privateKeySecretRef:
       # Secret resource used to store the account's private key.

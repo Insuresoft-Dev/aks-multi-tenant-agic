@@ -1,7 +1,7 @@
 #/bin/bash
 
 # Variables
-email="<your-email-address>"
+email="tpurl@insuresoft.com"
 namespace="default"
 clusterIssuer="letsencrypt-application-gateway"
 template="cluster-issuer.yml"
@@ -16,5 +16,8 @@ else
     # Create the cluster issuer 
     echo "[$clusterIssuer] cluster issuer does not exist"
     echo "Creating [$clusterIssuer] cluster issuer..."
-    cat $template | yq -Y "(.spec.acme.email)|="\""$email"\" | kubectl apply -n $namespace -f -
+    # cat $template | yq -Y "(.spec.acme.email)|="\""$email"\" | kubectl apply -n $namespace -f -
+    cat $template | sed "s|{{email}}|$email|g" | kubectl apply -n $namespace -f -
+                
+
 fi

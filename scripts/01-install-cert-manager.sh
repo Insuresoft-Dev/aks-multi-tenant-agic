@@ -6,7 +6,7 @@ repoName="jetstack"
 repoUrl="https://charts.jetstack.io"
 chartName="cert-manager"
 releaseName="cert-manager"
-version="v1.2.0"
+version="v1.4.0"
 
 # check if namespace exists in the cluster
 result=$(kubectl get ns -o jsonpath="{.items[?(@.metadata.name=='$namespace')].metadata.name}")
